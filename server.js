@@ -1,73 +1,28 @@
 const express = require('express');
-const cors = require('cors');
-require('dotenv').config();
+const dotenv = require('dotenv');
 const connectDB = require('./config/database');
 
-// 1. Require các tuyến đường (Routes)
-const productRoutes = require('./routes/productRoutes');
-const orderRoutes = require('./routes/orderRoutes'); 
+// Cấu hình đọc file môi trường .env
+dotenv.config();
 
-// 2. Khởi tạo Express app (CHỈ VIẾT DÒNG NÀY 1 LẦN)
-const app = express();
-
-// 3. Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// 4. Kết nối MongoDBPORT=5000
-MONGODB_URI
+// Kết nối vào cơ sở dữ liệu MongoDB
 connectDB();
 
-// 5. Sử dụng các Routes
+const app = express();
+
+// Cho phép Server đọc dữ liệu dạng JSON gửi lên từ Frontend
+app.use(express.json());
+
+// 1. KẾT NỐI API GIẢM GIÁ CỦA DUY
+const productRoutes = require('./routes/productRoutes');
 app.use('/api/products', productRoutes);
-app.use('/api/orders', orderRoutes); 
 
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'Server is running',
-    timestamp: new Date().toISOString(),
-  });
-});
+// 2. KẾT NỐI API THANH TOÁN CỦA THIỆN
+const orderRoutes = require('./routes/orderRoutes');
+app.use('/api/orders', orderRoutes);
 
-// Root endpoint
-app.get('/', (req, res) => {
-  res.status(200).json({
-    message: '👔 Clothing Store Backend - Discount & Checkout Service',
-    version: '1.0.0',
-    endpoints: {
-      health: '/api/health',
-      products: '/api/products',
-      discounted_products: '/api/products/discounted',
-      calculate_cart: '/api/products/calculate/cart-total',
-      checkout: '/api/orders/checkout'
-    },
-  });
-});
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(' Error:', err);
-  res.status(500).json({
-    success: false,
-    message: 'Internal Server Error',
-    error: err.message,
-  });
-});
-
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'Endpoint không tìm thấy',
-  });
-});
-
-// Khởi động server
+// Cấu hình Cổng chạy cho Server Backend (Mặc định là 5000)
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(` Server is running on http://localhost:${PORT}`);
-  console.log(` API Documentation: http://localhost:${PORT}`);
+    console.log(`Server đang chạy cực mượt tại cổng: ${PORT}`);
 });
