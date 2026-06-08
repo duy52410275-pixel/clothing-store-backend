@@ -1,23 +1,27 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-
 const connectDB = require('./config/database');
-const productRoutes = require('./routes/productRoutes');
 
-// Khởi tạo Express app
+// 1. Require các tuyến đường (Routes)
+const productRoutes = require('./routes/productRoutes');
+const orderRoutes = require('./routes/orderRoutes'); 
+
+// 2. Khởi tạo Express app (CHỈ VIẾT DÒNG NÀY 1 LẦN)
 const app = express();
 
-// Middleware
+// 3. Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Kết nối MongoDB
+// 4. Kết nối MongoDBPORT=5000
+MONGODB_URI
 connectDB();
 
-// Routes
+// 5. Sử dụng các Routes
 app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes); 
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -31,13 +35,14 @@ app.get('/api/health', (req, res) => {
 // Root endpoint
 app.get('/', (req, res) => {
   res.status(200).json({
-    message: '👔 Clothing Store Backend - Discount Service',
+    message: '👔 Clothing Store Backend - Discount & Checkout Service',
     version: '1.0.0',
     endpoints: {
       health: '/api/health',
       products: '/api/products',
       discounted_products: '/api/products/discounted',
       calculate_cart: '/api/products/calculate/cart-total',
+      checkout: '/api/orders/checkout'
     },
   });
 });
