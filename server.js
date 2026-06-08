@@ -44,7 +44,7 @@ app.get('/', (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  console.error('❌ Error:', err);
+  console.error(' Error:', err);
   res.status(500).json({
     success: false,
     message: 'Internal Server Error',
@@ -63,6 +63,6 @@ app.use((req, res) => {
 // Khởi động server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
-  console.log(`📚 API Documentation: http://localhost:${PORT}`);
+  console.log(` Server is running on http://localhost:${PORT}`);
+  console.log(` API Documentation: http://localhost:${PORT}`);
 });

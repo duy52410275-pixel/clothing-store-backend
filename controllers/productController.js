@@ -133,9 +133,7 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-// 6. ⭐ Tính tổng tiền giỏ hàng (dùng cho bạn Trung Thiện - Thanh toán)
-// Đầu vào: mảng các sản phẩm với số lượng
-// Đầu ra: final_total (tổng tiền sau khi áp dụng giá giảm)
+
 const calculateCartTotal = async (req, res) => {
   try {
     const { cartItems } = req.body;
